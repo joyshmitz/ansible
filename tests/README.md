@@ -9,6 +9,11 @@ Unit tests for every Python file this repository ships: the `cluster_vm`
 Ansible module, the scripts deployed as role `files/` payloads, and the
 OpenSCAP report converter used by the CI.
 
+The `seapath_alloc` package keeps its own suite inside
+`roles/deploy_seapath_alloc/files/seapath_alloc/tests/`, because the package is
+also installable on its own. `tox -e unit` collects both directories and
+reports them together.
+
 ## Running them
 
 ```bash
@@ -77,6 +82,10 @@ The badge thresholds this suite answers to:
 | `test_statement_coverage90` | gold | 90% statements |
 | `test_branch_coverage80` | gold | 80% branches |
 
-Current: **100% of statements, 98.7% of branches**. The remaining partial
-branches are the unreachable fall-through of the last `elif` in the three
-index-driven dispatch loops of `snmp_getdata.py`.
+Current: **99.9% of statements, 98.2% of branches**, over 682 tests.
+
+What is left is unreachable rather than untested: the fall-through of the last
+`elif` in the index-driven dispatch loops of `snmp_getdata.py` and of
+`seapath_alloc`, and the `else` at the end of `seapath_alloc/cli.py`, which
+argparse's subparser choices make impossible to reach. That one is kept as a
+guard for a subcommand added without a matching branch.
